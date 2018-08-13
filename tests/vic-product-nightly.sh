@@ -77,7 +77,7 @@ ENV_FILE=${ENV_FILE:-'vic-product-nightly-secrets.list'}
 PARLLEL_JOBS=${PARLLEL_JOBS:-'4'}
 ROBOT_REPORT=${ROBOT_REPORT:-'report'}
 TEST_CASES=${TEST_CASES:-'tests/manual-test-cases'}
-docker run --net grid --privileged --rm --link selenium-hub:selenium-grid-hub -v /var/run/docker.sock:/var/run/docker.sock -v /etc/docker/certs.d:/etc/docker/certs.d -v $PWD/vic-product:/go -v /vic-cache:/vic-cache --env-file vic-internal/${ENV_FILE} gcr.io/eminent-nation-87317/vic-integration-test:1.46 pabot --verbose --processes ${PARLLEL_JOBS} -d ${ROBOT_REPORT} --removekeywords TAG:secret --exclude skip ${TEST_CASES}
+docker run --net grid --privileged --rm --link selenium-hub:selenium-grid-hub -v /var/run/docker.sock:/var/run/docker.sock -v /etc/docker/certs.d:/etc/docker/certs.d -v $PWD/vic-product:/go -v /vic-cache:/vic-cache --env-file vic-internal/${ENV_FILE} gcr.io/eminent-nation-87317/vic-integration-test:1.46 pabot --verbose --processes ${PARLLEL_JOBS} -d ${ROBOT_REPORT} --removekeywords TAG:secret --exclude skip --variable ESX_VERSION:"${ESX_BUILD}" --variable VC_VERSION:"${VC_BUILD}" ${TEST_CASES}
 cat vic-product/pabot_results/*/stdout.txt | grep -E '::|\.\.\.' | grep -E 'PASS|FAIL' > console.log
 
 # Pretty up the email results
